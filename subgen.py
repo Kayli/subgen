@@ -92,8 +92,13 @@ def generate_subtitle(video_path: Path, model: str = "large-v3") -> bool:
         print(f"✗ Error processing {video_path.name}: {e}")
         return False
 
-def main():
-    """Main CLI function"""
+def create_argument_parser() -> argparse.ArgumentParser:
+    """
+    Create and configure the command-line argument parser.
+    
+    Returns:
+        Configured ArgumentParser instance
+    """
     parser = argparse.ArgumentParser(
         description="Generate subtitles for video files using Whisper",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -129,6 +134,11 @@ Examples:
         help='Show what would be processed without actually generating subtitles'
     )
     
+    return parser
+
+def main():
+    """Main CLI function"""
+    parser = create_argument_parser()
     args = parser.parse_args()
     
     # Validate directory
