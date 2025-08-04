@@ -35,21 +35,21 @@ With options:
 # Use a different Whisper model
 python subgen.py /path/to/videos --model small
 
-# Skip videos that already have subtitle files
-python subgen.py /path/to/videos --skip-existing
+# Override existing subtitle files (regenerate all)
+python subgen.py /path/to/videos --override-existing
 
 # Preview what will be processed without generating subtitles
 python subgen.py /path/to/videos --dry-run
 
 # Combine options
-python subgen.py /path/to/videos --model medium --skip-existing
+python subgen.py /path/to/videos --model medium --override-existing
 ```
 
 ## Command Line Options
 
 - `directory`: Path to directory containing video files (required)
 - `--model, -m`: Whisper model to use (tiny, base, small, medium, large, large-v1, large-v2, large-v3) - default: large-v3
-- `--skip-existing, -s`: Skip videos that already have subtitle files
+- `--override-existing, -o`: Override existing subtitle files (default: skip existing files)
 - `--dry-run, -n`: Show what would be processed without generating subtitles
 
 ## Supported Video Formats

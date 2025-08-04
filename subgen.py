@@ -106,7 +106,7 @@ def create_argument_parser() -> argparse.ArgumentParser:
 Examples:
   %(prog)s /path/to/videos
   %(prog)s /path/to/videos --model small
-  %(prog)s /path/to/videos --model medium --skip-existing
+  %(prog)s /path/to/videos --model medium --override-existing
         """
     )
     
@@ -123,9 +123,9 @@ Examples:
     )
     
     parser.add_argument(
-        '--skip-existing', '-s',
+        '--override-existing', '-o',
         action='store_true',
-        help='Skip videos that already have subtitle files'
+        help='Override existing subtitle files (default: skip existing files)'
     )
     
     parser.add_argument(
@@ -167,8 +167,8 @@ def main():
     
     print(f"Found {len(video_files)} video file(s)")
     
-    # Filter out files that already have subtitles if requested
-    if args.skip_existing:
+    # Filter out files that already have subtitles (default behavior)
+    if not args.override_existing:
         filtered_files = []
         for video_file in video_files:
             subtitle_file = video_file.with_suffix('.srt')
@@ -180,6 +180,7 @@ def main():
         
         if not video_files:
             print("All video files already have subtitles")
+            print("Use --override-existing to regenerate existing subtitles")
             sys.exit(0)
     
     # Show what will be processed
