@@ -24,12 +24,15 @@ def find_video_files(directory: Path) -> List[Path]:
         directory: Path to the directory to search
         
     Returns:
-        List of Path objects for video files found
+        List of Path objects for video files found, sorted alphabetically
     """
     video_files = []
     
     try:
         for root, dirs, files in os.walk(directory):
+            # Sort directories and files for consistent ordering
+            dirs.sort()
+            files.sort()
             for file in files:
                 file_path = Path(root) / file
                 if file_path.suffix.lower() in VIDEO_EXTENSIONS:
@@ -39,6 +42,8 @@ def find_video_files(directory: Path) -> List[Path]:
     except Exception as e:
         print(f"Error scanning directory: {e}")
         
+    # Sort the final list of video files alphabetically
+    video_files.sort()
     return video_files
 
 def check_whisper_installed() -> bool:
