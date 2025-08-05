@@ -60,13 +60,14 @@ def check_whisper_installed() -> bool:
     except (subprocess.TimeoutExpired, FileNotFoundError):
         return False
 
-def generate_subtitle(video_path: Path, model: str = "large-v3") -> bool:
+def generate_subtitle(video_path: Path, model: str = "large-v3", language: str = None) -> bool:
     """
     Generate subtitle file for a video using Whisper.
     
     Args:
         video_path: Path to the video file
         model: Whisper model to use (tiny, base, small, medium, large)
+        language: Language to use for transcription (optional, auto-detect if None)
         
     Returns:
         True if successful, False otherwise
@@ -78,9 +79,14 @@ def generate_subtitle(video_path: Path, model: str = "large-v3") -> bool:
             'whisper',
             str(video_path),
             '--model', model,
-            '--output_dir', str(video_path.parent),
-            '--output_format', 'srt'
+            #'--output_dir', str(video_path.parent),
+            '--output_format', 'srt',
+            #'--device', 'mps'
         ]
+        
+        # Add language parameter if specified
+        if language:
+            cmd.extend(['--language', language])
         
         print(f"Processing: {video_path.name}")
         result = subprocess.run(cmd, capture_output=True, text=True)
@@ -137,6 +143,11 @@ Examples:
         '--dry-run', '-n',
         action='store_true',
         help='Show what would be processed without actually generating subtitles'
+    )
+    
+    parser.add_argument(
+        '--language', '-l',
+        help='Language for transcription (e.g., en, es, fr, de, etc.). If not specified, Whisper will auto-detect the language.'
     )
     
     return parser
@@ -210,7 +221,7 @@ def main():
     failed = 0
     
     for video_file in video_files:
-        if generate_subtitle(video_file, args.model):
+        if generate_subtitle(video_file, args.model, args.language):
             successful += 1
         else:
             failed += 1
