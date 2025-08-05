@@ -79,7 +79,7 @@ def generate_subtitle(video_path: Path, model: str = "large-v3", language: str =
             'whisper',
             str(video_path),
             '--model', model,
-            #'--output_dir', str(video_path.parent),
+            '--output_dir', str(video_path.parent),
             '--output_format', 'srt',
             #'--device', 'mps'
         ]
